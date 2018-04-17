@@ -29,8 +29,10 @@ a lot, most important
 [![screenshot multiple_screens](https://raw.githubusercontent.com/dasoe/oeShowTool/master/bin/data/screenShots/oeShowTool_screen1.png)](https://raw.githubusercontent.com/dasoe/oeShowTool/master/bin/data/screenShots/oeShowTool_screen1.png)
 multiple screens (that usuallybe on secon screen/projector probably) and GUI
 
+
 [![screenshot warping_a_screen](https://raw.githubusercontent.com/dasoe/oeShowTool/master/bin/data/screenShots/oeShowTool_screen2.png)](https://raw.githubusercontent.com/dasoe/oeShowTool/master/bin/data/screenShots/oeShowTool_screen2.png)
 warping a screen
 
+
 [![screenshot building_a_mask](https://raw.githubusercontent.com/dasoe/oeShowTool/master/bin/data/screenShots/oeShowTool_screen3.png)](https://raw.githubusercontent.com/dasoe/oeShowTool/master/bin/data/screenShots/oeShowTool_screen3.png)
-building a mask
+building a mask with changes seen live on screen
