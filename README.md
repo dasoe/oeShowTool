@@ -26,11 +26,11 @@ a lot, most important
 # Screenshots
 (so that you can see where it goes)
 
-[[https://github.com/dasoe/oeShowTool/tree/master/bin/data/screenShots/oeShowTool_screen1.png|alt=oeShowTool_screen1]]
-multiple screens
+[![screenshot multiple_screens](https://raw.githubusercontent.com/dasoe/oeShowTool/master/bin/data/screenShots/oeShowTool_screen1.png)](https://raw.githubusercontent.com/dasoe/oeShowTool/master/bin/data/screenShots/oeShowTool_screen1.png)
+multiple screens (that usuallybe on secon screen/projector probably) and GUI
 
-[[https://github.com/dasoe/oeShowTool/tree/master/bin/data/screenShots/oeShowTool_screen2.png|alt=oeShowTool_screen2]]
+[![screenshot warping_a_screen](https://raw.githubusercontent.com/dasoe/oeShowTool/master/bin/data/screenShots/oeShowTool_screen2.png)](https://raw.githubusercontent.com/dasoe/oeShowTool/master/bin/data/screenShots/oeShowTool_screen2.png)
 warping a screen
 
-[[https://github.com/dasoe/oeShowTool/tree/master/bin/data/screenShots/oeShowTool_screen3.png|alt=oeShowTool_screen3]]
-building a mask for a screen
+[![screenshot building_a_mask](https://raw.githubusercontent.com/dasoe/oeShowTool/master/bin/data/screenShots/oeShowTool_screen3.png)](https://raw.githubusercontent.com/dasoe/oeShowTool/master/bin/data/screenShots/oeShowTool_screen3.png)
+building a mask
