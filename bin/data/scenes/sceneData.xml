@@ -1,0 +1,81 @@
+<SETTINGS>
+    <scene>
+        <name>Einlass</name>
+        <number>10</number>
+    </scene>
+    <scene>
+        <name>Einlass IIo</name>
+        <number>22</number>
+    </scene>
+    <scene>
+        <name>NEU fÜR Astrid</name>
+        <number>28</number>
+    </scene>
+    <scene>
+        <name>new</name>
+        <number>40</number>
+    </scene>
+    <scene>
+        <name>new</name>
+        <number>50</number>
+    </scene>
+    <scene>
+        <name>new</name>
+        <number>60</number>
+    </scene>
+    <slot>
+        <type>1</type>
+        <color>
+            <r>0.000000000</r>
+            <g>0.000000000</g>
+            <b>0.000000000</b>
+        </color>
+        <imagepath>images/2018-03-03-191018.jpg</imagepath>
+        <videopath />
+        <targetVideopath />
+    </slot>
+    <slot>
+        <type>0</type>
+        <color>
+            <r>0.000000000</r>
+            <g>0.000000000</g>
+            <b>1.000000000</b>
+        </color>
+        <imagepath />
+        <videopath />
+        <targetVideopath />
+    </slot>
+    <slot>
+        <type>1</type>
+        <color>
+            <r>0.000000000</r>
+            <g>0.000000000</g>
+            <b>0.000000000</b>
+        </color>
+        <imagepath>images/2018-03-03-191018.jpg</imagepath>
+        <videopath />
+        <targetVideopath />
+    </slot>
+    <slot>
+        <type>2</type>
+        <color>
+            <r>0.000000000</r>
+            <g>0.000000000</g>
+            <b>0.000000000</b>
+        </color>
+        <imagepath />
+        <videopath>videos/Timecoded_Big_bunny_2.mov</videopath>
+        <targetVideopath>videos/Timecoded_Big_bunny_2.mov</targetVideopath>
+    </slot>
+    <slot>
+        <type>0</type>
+        <color>
+            <r>0.000000000</r>
+            <g>0.000000000</g>
+            <b>0.000000000</b>
+        </color>
+        <imagepath />
+        <videopath />
+        <targetVideopath />
+    </slot>
+</SETTINGS>

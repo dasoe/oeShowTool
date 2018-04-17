@@ -1,0 +1,13 @@
+<SETTINGS>
+<debug>1</debug>
+<verbose>0</verbose>
+<logToFile>0</logToFile>
+<someInt>54</someInt>
+<firstMonitorWidth>1024</firstMonitorWidth>
+<firstMonitorHeight>768</firstMonitorHeight>
+<maskWidth>1024</maskWidth>
+<maskHeight>768</maskHeight>
+<contentWidth>800</contentWidth>
+<contentHeight>600</contentHeight>
+<deafultMask>masks/mulli.jpg</deafultMask>
+</SETTINGS>
