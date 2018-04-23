@@ -12,7 +12,13 @@ The Tool is based on the following excellent external plugins:
 - ofxBezierWarp (https://github.com/gameoverhack/ofxBezierWarp) for mapping/warping
 - ofxImGui (https://github.com/jvcleave/ofxImGui) which again is a wrapper for ImGui (https://github.com/ocornut/imgui) fr the GUI
 - ofxBezierEditor (https://github.com/acarreras/ofxBezierEditor) for the mask functionality
+
 Thanks a lot to the authors for the incredible work!
+
+
+# Windows
+
+There is a windows branch, which is not stable yet (even less stable then the master, which is linux). It is using gstreamer, so additional Installation is needed. 
 
 
 # TODO:
