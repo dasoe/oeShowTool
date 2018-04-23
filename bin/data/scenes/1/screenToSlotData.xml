@@ -3,9 +3,6 @@
         <slot>1</slot>
     </screenToSlot>
     <screenToSlot>
-        <slot>1</slot>
-    </screenToSlot>
-    <screenToSlot>
         <slot>2</slot>
     </screenToSlot>
 </SETTINGS>
