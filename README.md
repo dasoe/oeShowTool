@@ -18,7 +18,7 @@ Thanks a lot to the authors for the incredible work!
 
 # Windows
 
-There is a windows branch, which is not stable yet (even less stable then the master, which is linux). It is using gstreamer, so additional Installation is needed. 
+The windows branch is not stable yet (even less stable then the master branch, which is Linux). It is using gstreamer, so additional Installation is needed. 
 
 
 # TODO:
@@ -28,6 +28,7 @@ a lot, most important
 - error catching
 - check multi monitor problems on ubuntu
 - add windows version (with gstreamer)
+
 
 # Screenshots
 (so that you can see where it goes)
