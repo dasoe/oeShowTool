@@ -33,7 +33,7 @@ class oeSlot {
 public:
 
 
-    void init(int contentWidthTemp, int contentHeightTemp);
+    void init(int contentWidthTemp, int contentHeightTemp, bool useGstreamer);
     void update();
     void prepareContent();
     void selectSource();
@@ -47,6 +47,9 @@ public:
     void loadTargetVideo(string path);
     void setVideoPaused(bool paused);
     void setTargetVideoPaused(bool paused);
+	void setVideoPosition(float percent);
+	float getVideoPosition();
+
     void restartVideo();
     void restartTargetVideo();
     void setVideoLoopState(ofLoopType state);
@@ -65,8 +68,8 @@ public:
 
     ofFbo getContent();
 
-
-    vector <ofVideoPlayer> video;
+	bool rewindOnTransition;
+	vector <ofVideoPlayer> video;
     bool mainVideo;
     ofImage image;
     string imagePath;
@@ -78,8 +81,13 @@ public:
     ofFloatColor targetColor;
     
     int targetAlpha;
-    
-    long actualTime, fadeTimerForSlot, slotIsActiveTimer;
+
+	float contrast;
+	float brightness;
+	float saturation;
+	ofShader brcosaShader;
+
+	long actualTime, fadeTimerForSlot, slotIsActiveTimer;
     int fadeTimeForSlot;
 
     int contentWidth, contentHeight;

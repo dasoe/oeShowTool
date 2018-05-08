@@ -53,7 +53,11 @@ void ofApp::setup() {
     settings.addInt("contentHeight", 768);
     settings.addInt("maskWidth", 1024);
     settings.addInt("maskHeight", 768);
+	settings.addBoolean("fullScreen", 0);
+	settings.addBoolean("useGstreamer", 0);
 
+	
+	
     settings.addString("deafultMask", "masks/test1.jpg");
 
     // Step 2: 
@@ -63,17 +67,20 @@ void ofApp::setup() {
     // (everything that is sent through ofLog functions). Should be used in the main/first xml object/file
     settings.init("settings.xml", true);
 
-    screenManager.setup(settings.getIntValue("firstMonitorWidth"), settings.getIntValue("firstMonitorHeight"), settings.getIntValue("contentWidth"), settings.getIntValue("contentHeight"));
+    
+	ofSetFullscreen(settings.getBooleanValue("fullScreen"));
+
+	screenManager.setup(settings.getIntValue("firstMonitorWidth"), settings.getIntValue("firstMonitorHeight"), settings.getIntValue("contentWidth"), settings.getIntValue("contentHeight"));
     actualScreen = 0;
 
     bezier.init(settings.getIntValue("contentWidth"), settings.getIntValue("contentHeight"), settings.getIntValue("maskWidth"), settings.getIntValue("maskHeight"));
 
     ofEnableAlphaBlending();
 
-    screenCreatePositionAndSize[0] = 800;
-    screenCreatePositionAndSize[1] = 100;
-    screenCreatePositionAndSize[2] = 500;
-    screenCreatePositionAndSize[3] = 400;
+    screenCreatePositionAndSize[0] = 10;
+    screenCreatePositionAndSize[1] = 10;
+    screenCreatePositionAndSize[2] = 800;
+    screenCreatePositionAndSize[3] = 600;
     screenCreateGrid[0] = 6;
     screenCreateGrid[1] = 5;
     screenCreateGrid[2] = 10;
@@ -449,8 +456,11 @@ void ofApp::loadSlotSettings(int sceneNumber) {
         if (slots[i]->imagePath != slotData.getValue("slot:imagepath", "", i)) {
             slots[i]->loadTargetImage(slotData.getValue("slot:imagepath", "", i));
         }
+		ofLogNotice("getmoviepath of actual slot: " + slots[i]->getMoviePath());
 
-        // set target video in case video shall be changed
+		ofLogNotice("movie Path in slot data: " + slotData.getValue("slot:videopath", "", i));
+
+		// set target video in case video shall be changed
         if (slots[i]->getMoviePath() != slotData.getValue("slot:videopath", "", i)) {
             slots[i]->loadTargetVideo(slotData.getValue("slot:videopath", "", i));
         }
@@ -572,6 +582,7 @@ void ofApp::prepareContentFbos() {
             tempFboTarget.draw(0, 0, screenManager.getScreenWidthOfScreen(i + 1), screenManager.getScreenHeightOfScreen(i + 1));
             ofSetColor(255, 255, 255, 255);
         }
+
         contentFbos[i].end();
         // ofLogNotice("contentFbos[i]: " + ofToString(contentFbos[i].getWidth()) + "masks[i]: " + ofToString(masks[i].getWidth()));
 
@@ -812,13 +823,16 @@ void ofApp::drawScenesGuiPart() {
 // -----------------------------------
 
 void ofApp::startScene(int sceneNumber) {
-    ofLogNotice("start Scene Number " + ofToString(sceneNumber));
+    ofLogNotice("start Scene Number " + ofToString(sceneNumber) + ": try to laod slot settings...");
     loadSlotSettings(sceneNumber);
+	ofLogNotice("try to load screen to slot settings...");
     loadScreenToSlotSettings(sceneNumber);
+	ofLogNotice("Vector tempScreenToSlot for sceneNumber " + ofToString(sceneNumber));
     vector <int> tempScreenToSlot = scenes[sceneNumber - 1]->getSlots();
     for (unsigned int i = 0; i < tempScreenToSlot.size(); i++) {
         targetSlotNumberForScreen[i] = tempScreenToSlot[i];
         //fadeTimeForScreen[i] = 500;
+		ofLogNotice("startTransitionForScreen " + ofToString(i+1));
         startTransitionForScreen(i + 1);
     }
 
@@ -1166,20 +1180,62 @@ void ofApp::drawSlotGuiPart() {
                     }
                 }
                 ImGui::SameLine();
+				if (ImGui::Button("speed to 1")) {
+					videoSpeed[i] = 1.0;
+					slots[i]->setVideoSpeed(videoSpeed[i]);
+				}
+				ImGui::SameLine();
                 // TODO: check if there is a flash, find better approach in restartVideo() if yes
                 if (ImGui::Button("rewind")) {
                     slots[i]->restartVideo();
                 }
                 ImGui::PushItemWidth(350);
-                if (ImGui::SliderFloat("speed", &videoSpeed[i], 0, 3.0)) {
-                    slots[i]->setVideoSpeed(videoSpeed[i]);
+
+				float tempPos = slots[i]->getVideoPosition()*100;
+                if (ImGui::SliderFloat("scrub", &tempPos, 0, 100)) {
+                    slots[i]->setVideoPosition(tempPos);
                 }
-                ImGui::PopItemWidth();
+				if (ImGui::SliderFloat("speed", &videoSpeed[i], 0, 30)) {
+					slots[i]->setVideoSpeed(videoSpeed[i]);
+				}
+				ImGui::PopItemWidth();
 
                 // ImGui::Image()
             }
 
-            string tempstring = "(loaded: " + ofToString(slots[i]->getInfo()) + ")";
+			ImGui::PushItemWidth(350);
+			int tempFadeTime = slots[i]->fadeTimeForSlot;				
+			if (ImGui::SliderInt("fade time", &tempFadeTime, 0, 3600)) {
+				slots[i]->fadeTimeForSlot = tempFadeTime;
+			}
+			ImGui::PopItemWidth();
+
+			ImGui::PushItemWidth(90);
+			float tempBrightness = slots[i] ->brightness;
+			float tempContrast = slots[i]->contrast;
+			float tempSaturation = slots[i]->saturation;
+			if (ImGui::SliderFloat("br", &tempBrightness, 0, 3.0)) {
+				slots[i]->brightness = tempBrightness;
+			}
+			ImGui::SameLine();
+			if (ImGui::SliderFloat("co", &tempContrast, 0, 3.0)) {
+				slots[i]->contrast = tempContrast;
+			}
+			ImGui::SameLine();
+			if (ImGui::SliderFloat("sa", &tempSaturation, 0, 3.0)) {
+				slots[i]->saturation = tempSaturation;
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("->0")) {
+				slots[i]->brightness = 1.0;
+				slots[i]->contrast = 1.0;
+				slots[i]->saturation = 1.0;
+			}
+				
+				
+			ImGui::PopItemWidth();
+
+			string tempstring = "(loaded: " + ofToString(slots[i]->getInfo()) + ")";
             ImGui::Text(tempstring.c_str());
 
             ImGui::PopID();
@@ -1240,7 +1296,13 @@ void ofApp::drawSlotGuiPart() {
                         }
                     }
                     ImGui::EndMenu();
+
                 }
+				bool tempRewindOnTransition = slots[i]->rewindOnTransition;
+				if (ImGui::Checkbox("rewind on Transiition", &tempRewindOnTransition)) {
+					slots[i]->rewindOnTransition = tempRewindOnTransition;
+				}
+
             }
 
             tempstring = "TARGET: " + ofToString(slots[i]->getTargetInfo());
@@ -1344,7 +1406,7 @@ void ofApp::addSlot() {
     oeSlot* slot = new oeSlot();
     slotTypes.push_back(1);
     targetSlotTypes.push_back(1);
-    slot->init(settings.getIntValue("contentWidth"), settings.getIntValue("contentHeight"));
+    slot->init(settings.getIntValue("contentWidth"), settings.getIntValue("contentHeight"), settings.getBooleanValue("useGstreamer"));
     slot->targetAlpha = 255;
     slot->fadeTimeForSlot = 1200;
     slots.push_back(slot);
