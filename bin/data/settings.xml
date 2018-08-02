@@ -1,13 +1,19 @@
 <SETTINGS>
+<!-- debug output on/off -->
 <debug>1</debug>
-<verbose>0</verbose>
-<logToFile>0</logToFile>
-<someInt>54</someInt>
-<firstMonitorWidth>1024</firstMonitorWidth>
-<firstMonitorHeight>768</firstMonitorHeight>
-<maskWidth>1024</maskWidth>
-<maskHeight>768</maskHeight>
-<contentWidth>800</contentWidth>
-<contentHeight>600</contentHeight>
+<!-- make debug output verbose -->
+<verbose>1</verbose>
+<!-- log debug output to file (otherwise console): bin/data/log.txt -->
+<logToFile>1</logToFile>
+<!-- fullscreen (multiple screens) on/off -->
+<fullScreen>1</fullScreen>
+<!-- use gestreamer as Video Player. See README.md in main folder -->
+<useGstreamer>1</useGstreamer>
+<firstMonitorWidth>1920</firstMonitorWidth>
+<firstMonitorHeight>1080</firstMonitorHeight>
+<maskWidth>1920</maskWidth>
+<maskHeight>1080</maskHeight>
+<contentWidth>1920</contentWidth>
+<contentHeight>1080</contentHeight>
 <deafultMask>masks/mulli.jpg</deafultMask>
 </SETTINGS>

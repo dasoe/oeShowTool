@@ -102,10 +102,14 @@ public:
     vector <long> fadeTimerForScreen;
     vector <bool> videoPaused;
     vector <bool> videoLooping;
-    vector <float> videoSpeed;
+
+
+
+	vector <float> videoSpeed;
     vector <bool> targetVideoPaused;
     vector <bool> targetVideoLooping;
     vector <float> targetVideoSpeed;
+
 
 
     oeBezierEditor bezier;
