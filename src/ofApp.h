@@ -66,7 +66,6 @@ public:
 
     ofxXmlSettings slotData, screenToSlotData, screenData, sceneData;
 
-
     long flashMessageTimer, actualTime;
     int screenCreatePositionAndSize[4], screenCreateGrid[3], removeScreenNumber;
     bool show_test_window, actualScreenSoloMode, showGridOnControlScreen;

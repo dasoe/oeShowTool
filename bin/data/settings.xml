@@ -8,7 +8,7 @@
 <!-- fullscreen (multiple screens) on/off -->
 <fullScreen>1</fullScreen>
 <!-- use gestreamer as Video Player. See README.md in main folder -->
-<useGstreamer>1</useGstreamer>
+<useGstreamer>0</useGstreamer>
 <firstMonitorWidth>1920</firstMonitorWidth>
 <firstMonitorHeight>1080</firstMonitorHeight>
 <maskWidth>1920</maskWidth>

@@ -298,22 +298,20 @@ void oeScreenManager::saveWarpSettingsToXML(string path) {
     vector<GLfloat> controlPoints;
 
     controlPoints = screens[actualScreen - 1]->getControlPoints();
-    warpXml.clear();
+
+	auto tempSettings = warpXml.getChild("SETTINGS");
+	tempSettings.removeChild("CONTROLPOINTS");
+	auto tempPoints = tempSettings.appendChild("CONTROLPOINTS");
+
     ofLogNotice("XML-Datei für Warp geleert. Nun neu anlegen...");
 
     ofLogNotice("control points: " + ofToString(controlPoints.size()));
 
-    ofXml point;
-    point.addChild("CONTROLPOINTS");
-    point.setTo("CONTROLPOINTS");
     for (unsigned int i = 0; i < controlPoints.size(); i++) {
-        point.addValue("PT", controlPoints[i]);
+		tempPoints.setAttribute("PT", controlPoints[i]);
     }
-    warpXml.addChild("SETTINGS");
-    warpXml.setTo("SETTINGS");
 
-    warpXml.addXml(point);
-    ofLogNotice("XML-Datei für Warp angelegt");
+	ofLogNotice("XML-Datei für Warp angelegt");
 
     warpXml.save(path);
     ofLogNotice("XML-Datei für Warp gespeichert: " + path);
@@ -329,13 +327,14 @@ int oeScreenManager::countPointsInSavedWarpSettings(string path) {
 	else {
 		ofLogWarning("XML-Datei für Warp existiert nicht? Pfad:" + ofToString(path) + "Warp-Punkte können nicht geladen werden");
 	}
-	if (warpXml.exists("SETTINGS")) {
-		warpXml.setTo("SETTINGS");
+	auto tempSettings = warpXml.getChild("SETTINGS");
+	auto tempPoints = tempSettings.getChild("CONTROLPOINTS");
+	auto tempAllPoints = tempPoints.getChildren("PT");
+	int number = 0;
+	for (auto & pt : tempAllPoints) {
+		number++;
 	}
-	if (warpXml.exists("CONTROLPOINTS")) {
-		warpXml.setTo("CONTROLPOINTS");
-	}
-	return warpXml.getNumChildren();
+	return number;
 }
 
 
@@ -356,11 +355,12 @@ void oeScreenManager::loadWarpSettingsFromXML(string path, bool forceLoad) {
 	vector<GLfloat> controlPoints;
 
 	if (numberofPoints == screens[actualScreen - 1]->getControlPoints().size() || forceLoad) {
-
-		//ofLogNotice("num Children: " + ofToString(warpXml.getNumChildren()));
-		for (int j = 0; j< screens[actualScreen - 1]->getControlPoints().size(); j++) {
-			//ofLogNotice(ofToString(warpXml.getValue<float>("PT[" + ofToString(j) + "]")));
-			controlPoints.push_back(warpXml.getValue<float>("PT[" + ofToString(j) + "]"));
+		auto tempSettings = warpXml.getChild("SETTINGS");
+		auto tempPoints = tempSettings.getChild("CONTROLPOINTS");
+		auto tempAllPoints = tempPoints.getChildren("PT");
+		int number = 0;
+		for (auto & pt : tempAllPoints) {
+			controlPoints.push_back(pt.getFloatValue());
 		}
 
 		screens[actualScreen - 1]->setControlPoints(controlPoints);

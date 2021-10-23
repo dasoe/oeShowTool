@@ -1064,7 +1064,7 @@ void ofApp::drawScreensGuiPart() {
         if (show_test_window) {
 
             ImGui::SetNextWindowPos(ofVec2f(650, 20), ImGuiSetCond_FirstUseEver);
-            ImGui::ShowTestWindow(&show_test_window);
+            ImGui::ShowDemoWindow(&show_test_window);
         } //required to call this at end
     }
 
@@ -1094,7 +1094,6 @@ void ofApp::drawSlotGuiPart() {
         slotTypes[i] = slots[i]->type;
         if (ImGui::TreeNode(nameofSlot.c_str())) {
             ImGui::Columns(2, "columns");
-
 
             ImGui::PushID(i);
             ImGui::RadioButton("Color", &slotTypes[i], 0);
@@ -1191,7 +1190,7 @@ void ofApp::drawSlotGuiPart() {
                 }
                 ImGui::PushItemWidth(350);
 
-				float tempPos = slots[i]->getVideoPosition()*100;
+		float tempPos = slots[i]->getVideoPosition();
                 if (ImGui::SliderFloat("scrub", &tempPos, 0, 100)) {
                     slots[i]->setVideoPosition(tempPos);
                 }

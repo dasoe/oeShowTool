@@ -1,7 +1,8 @@
+ofxBezierEditor
 ofxBezierWarp
-ofxXmlSettingsTool
+ofxGStreamer
 ofxGui
 ofxImGui
-ofxBezierEditor
-ofxXmlSettings
 ofxOpenCv
+ofxXmlSettings
+ofxXmlSettingsTool

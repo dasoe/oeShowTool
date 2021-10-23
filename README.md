@@ -8,13 +8,18 @@ The tool will be used for driving shows based on video projection.
 This is an early alpha version, but already features different screens with mapping/warping and a bezier based mask editor.
 The screens are connected to input slots (color, image, video), scenes are used to store all settings.
 
-The Tool is based on the following excellent external plugins:
+The Tool is based on the following excellent external addons:
 - ofxBezierWarp (https://github.com/gameoverhack/ofxBezierWarp) for mapping/warping
-- ofxImGui (https://github.com/jvcleave/ofxImGui) which again is a wrapper for ImGui (https://github.com/ocornut/imgui) fr the GUI
+- ofxImGui (https://github.com/jvcleave/ofxImGui), a wrapper for ImGui (https://github.com/ocornut/imgui)*
 - ofxBezierEditor (https://github.com/acarreras/ofxBezierEditor) for the mask functionality
 
+* I think I have changed the imgui source packed in the addon to a newer version for color picker functionality. 
 Thanks a lot to the authors for the incredible work!
+Also I use a a small addon for some basic XML settings with debug functionality.
 
+# OF Version
+
+As this is still early development and no stable version has been released yet, I will not support of 0.9.x Sorry.
 
 # Windows
 

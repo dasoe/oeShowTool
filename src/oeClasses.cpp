@@ -1,4 +1,4 @@
-#include "oeClasses.h"	
+#include "oeClasses.h"
 #include "ofGstVideoPlayer.h"
 
 
@@ -360,16 +360,12 @@ void oeSlot::setTargetVideoPaused(bool paused) {
     video[!mainVideo].setPaused(paused);
 }
 
-//--------------------------------------------------------------
-
-void oeSlot::setVideoPosition(float percent) {
-	video[mainVideo].setPosition(percent/100.0);
+float oeSlot::getVideoPosition() {
+	return video[mainVideo].getPosition() * 100;
 }
 
-//--------------------------------------------------------------
-
-float oeSlot::getVideoPosition() {
-	return video[mainVideo].getPosition();
+void oeSlot::setVideoPosition(float percent) {
+	video[mainVideo].setPosition(percent / 100.0);
 }
 
 //--------------------------------------------------------------
