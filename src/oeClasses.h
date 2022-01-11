@@ -33,7 +33,7 @@ class oeSlot {
 public:
 
 
-    void init(int contentWidthTemp, int contentHeightTemp, bool useGstreamer);
+    void init(int contentWidthTemp, int contentHeightTemp);
     void update();
     void prepareContent();
     void selectSource();

@@ -1,6 +1,5 @@
-<SETTINGS>
 <!-- debug output on/off -->
-<debug>1</debug>
+<logging>1</logging>
 <!-- make debug output verbose -->
 <verbose>1</verbose>
 <!-- log debug output to file (otherwise console): bin/data/log.txt -->
@@ -16,4 +15,3 @@
 <contentWidth>1920</contentWidth>
 <contentHeight>1080</contentHeight>
 <deafultMask>masks/mulli.jpg</deafultMask>
-</SETTINGS>

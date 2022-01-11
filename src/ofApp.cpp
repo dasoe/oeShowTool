@@ -240,7 +240,8 @@ void ofApp::loadScreenSettings() {
 
 
 
-        ofImage tempMask = screenData.getValue("screen:mask", "", i);
+        ofImage tempMask;
+        tempMask.load( screenData.getValue("screen:mask", "", i) );
         masks[i] = tempMask;
         masks[i].setImageType(OF_IMAGE_COLOR_ALPHA);
         masks[i].getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
@@ -1038,8 +1039,9 @@ void ofApp::drawScreensGuiPart() {
                     //go through and print out all the paths
                     for (unsigned int i = 0; i < maskDir.size(); i++) {
                         //const char * c = maskDir.getPath(i).c_str();
-                        if (ImGui::MenuItem(maskDir.getPath(i).c_str())) {
-                            ofImage tempMask = maskDir.getPath(i);
+                        if ( ImGui::MenuItem( maskDir.getPath(i).c_str() ) ) {
+                            ofImage tempMask;
+                            tempMask.load(maskDir.getPath(i) );
                             masks[screenManager.actualScreen - 1] = tempMask;
                             masks[screenManager.actualScreen - 1].setImageType(OF_IMAGE_COLOR_ALPHA);
                             masks[screenManager.actualScreen - 1].getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
@@ -1062,8 +1064,8 @@ void ofApp::drawScreensGuiPart() {
         }
         if (show_test_window) {
 
-            ImGui::SetNextWindowPos(ofVec2f(650, 20), ImGuiSetCond_FirstUseEver);
-            ImGui::ShowTestWindow(&show_test_window);
+            ImGui::SetNextWindowPos(ofVec2f(650, 20), ImGuiCond_FirstUseEver);
+            ImGui::ShowDemoWindow(&show_test_window);
         } //required to call this at end
     }
 

@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "oeClasses.h"
 #include "oeScreenManager.h"
-#include "ofxXmlSettingsTool.h"
+#include "ofxXmlBasedProjectSettings.h"
 #include "ofxXmlSettings.h"
 #include "ofxImGui.h"
 
@@ -116,7 +116,7 @@ public:
 
     int maskBlur;
 
-    ofxXmlSettingsTool settings;
+    ofxXmlBasedProjectSettings settings;
 
     oeScreenManager screenManager;
     int actualScreen, firstMonitorWidth, firstMonitorHeight;

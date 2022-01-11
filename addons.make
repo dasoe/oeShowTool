@@ -1,5 +1,5 @@
 ofxBezierWarp
-ofxXmlSettingsTool
+ofxXmlBasedProjectSettings
 ofxGui
 ofxImGui
 ofxBezierEditor
