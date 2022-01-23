@@ -19,8 +19,8 @@ void oeScreenManager::setup(int firstMonitorWidthTemp, int firstMonitorHeightTem
     contentHeight= contentHeightTemp;
 
     ofEnableAlphaBlending();
-
-    maskShader.load("shaders/dummyVert.c", "shaders/maskShaderFrag.c");
+//  TODO: mask as shader?
+//  maskShader.load("shaders/dummyVert.c", "shaders/maskShaderFrag.c");
 
 }
 

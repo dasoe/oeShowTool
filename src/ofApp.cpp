@@ -53,7 +53,7 @@ void ofApp::setup() {
     settings.addInt("contentHeight", 768);
     settings.addInt("maskWidth", 1024);
     settings.addInt("maskHeight", 768);
-	settings.addBoolean("fullScreen", 0);
+    settings.addBoolean("fullScreen", 0);
 
 	
 	
@@ -242,11 +242,9 @@ void ofApp::loadScreenSettings() {
 
         ofImage tempMask;
         tempMask.load( screenData.getValue("screen:mask", "", i) );
-        masks[i] = tempMask;
-        masks[i].setImageType(OF_IMAGE_COLOR_ALPHA);
-        masks[i].getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
-        maskPaths[i] = screenData.getValue("screen:mask", "", i);
-
+        updateMasks(i, tempMask, screenData.getValue("screen:mask", "", i));
+                
+        
         screenManager.actualScreen = i + 1;
         screenManager.setScreenPresentationWidth(screenManager.actualScreen, screenData.getValue("screen:presentationWidth", 800, i));
         screenManager.setScreenPresentationHeight(screenManager.actualScreen, screenData.getValue("screen:presentationHeight", 600, i));
@@ -257,6 +255,23 @@ void ofApp::loadScreenSettings() {
     screenData.popTag();
 
 }
+
+//--------------------------------------------------------------
+
+void ofApp::updateMasks(int number, ofImage tempMask, string maskString) {
+    
+        masks[number] = tempMask;
+        masks[number].setImageType(OF_IMAGE_COLOR_ALPHA);
+        masks[number].getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
+        maskPaths[number] = maskString;
+    
+        if ( maskPaths[number].length() ) {
+            contentFbos[number].getTexture().setAlphaMask(masks[number].getTexture());            
+        } else {
+            contentFbos[number].getTexture().disableAlphaMask();    
+        }
+}
+
 
 // -----------------------------------
 
@@ -586,8 +601,12 @@ void ofApp::prepareContentFbos() {
         contentFbos[i].end();
         // ofLogNotice("contentFbos[i]: " + ofToString(contentFbos[i].getWidth()) + "masks[i]: " + ofToString(masks[i].getWidth()));
 
-
-        contentFbos[i].getTexture().setAlphaMask(masks[i].getTexture());
+        // if a mask is provided, use it
+//        if ( maskPaths[i].length() ) {
+//            contentFbos[i].getTexture().setAlphaMask(masks[i].getTexture());            
+//        } else {
+//            contentFbos[i].getTexture().disableAlphaMask();    
+//        }
     }
 }
 
@@ -738,8 +757,8 @@ void ofApp::startTransitionForScreen(int screenNumber) {
 // -----------------------------------
 
 void ofApp::drawScenesGuiPart() {
-    ImGui::Begin("Bilder");
-    if (ImGui::Button("Neues Bild")) {
+    ImGui::Begin("Scenes");
+    if (ImGui::Button("New Scene")) {
         addScene();
     }
     ImGui::SameLine();
@@ -1035,6 +1054,15 @@ void ofApp::drawScreensGuiPart() {
                 }
             }
             if (screenManager.actualScreen > 0) {
+                if (ImGui::Button("remove Mask")) {
+                    // set an empty mask
+                    ofImage tempMask;
+                    updateMasks(screenManager.actualScreen - 1, tempMask, "");
+                    
+                } 
+                ImGui::SameLine();
+
+
                 if (ImGui::BeginMenu("load Mask to actual screen")) {
                     //go through and print out all the paths
                     for (unsigned int i = 0; i < maskDir.size(); i++) {
@@ -1042,10 +1070,7 @@ void ofApp::drawScreensGuiPart() {
                         if ( ImGui::MenuItem( maskDir.getPath(i).c_str() ) ) {
                             ofImage tempMask;
                             tempMask.load(maskDir.getPath(i) );
-                            masks[screenManager.actualScreen - 1] = tempMask;
-                            masks[screenManager.actualScreen - 1].setImageType(OF_IMAGE_COLOR_ALPHA);
-                            masks[screenManager.actualScreen - 1].getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
-                            maskPaths[screenManager.actualScreen - 1] = maskDir.getPath(i);
+                             updateMasks(screenManager.actualScreen - 1, tempMask, maskDir.getPath(i));
                         }
                     }
                     ImGui::EndMenu();

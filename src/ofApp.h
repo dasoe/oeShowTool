@@ -18,7 +18,8 @@ public:
     void drawSlotGuiPart();
     void drawScenesGuiPart();
     void drawDMXLightsGuiPart();
-
+    void updateMasks(int number, ofImage tempMask, string maskString);
+    
     void saveSceneSettings(int sceneNumber);
     void prepareInnerSceneSettingsForSave(int tagNumber, int sceneNumber);
 
