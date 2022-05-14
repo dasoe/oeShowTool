@@ -1,9 +1,9 @@
 <!-- debug output on/off -->
 <logging>1</logging>
 <!-- make debug output verbose -->
-<verbose>1</verbose>
+<verbose>0</verbose>
 <!-- log debug output to file (otherwise console): bin/data/log.txt -->
-<logToFile>1</logToFile>
+<logToFile>0</logToFile>
 <!-- fullscreen (multiple screens) on/off -->
 <fullScreen>1</fullScreen>
 <!-- use gestreamer as Video Player. See README.md in main folder -->

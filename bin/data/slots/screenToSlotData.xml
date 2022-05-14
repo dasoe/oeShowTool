@@ -1,11 +1,8 @@
 <SETTINGS>
     <screenToSlot>
-        <slot>1</slot>
-    </screenToSlot>
-    <screenToSlot>
-        <slot>1</slot>
-    </screenToSlot>
-    <screenToSlot>
         <slot>2</slot>
+    </screenToSlot>
+    <screenToSlot>
+        <slot>4</slot>
     </screenToSlot>
 </SETTINGS>

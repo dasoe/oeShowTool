@@ -1,14 +1,14 @@
 <SETTINGS>
     <slot>
         <type>0</type>
-        <width>800</width>
-        <height>600</height>
+        <width>1920</width>
+        <height>1080</height>
         <color>
-            <r>0.834576666</r>
-            <g>0.310394585</g>
-            <b>0.047869224</b>
+            <r>0.447058856</r>
+            <g>0.564705908</g>
+            <b>0.603921592</b>
         </color>
-        <imagepath></imagepath>
+        <imagepath>images/2018-03-03-191018.jpg</imagepath>
         <videopath></videopath>
         <paused>0</paused>
         <loop>1</loop>
@@ -16,23 +16,8 @@
     </slot>
     <slot>
         <type>0</type>
-        <width>800</width>
-        <height>600</height>
-        <color>
-            <r>0.874309719</r>
-            <g>0.517680228</g>
-            <b>0.242379010</b>
-        </color>
-        <imagepath></imagepath>
-        <videopath></videopath>
-        <paused>0</paused>
-        <loop>1</loop>
-        <speed>1.000000000</speed>
-    </slot>
-    <slot>
-        <type>1</type>
-        <width>800</width>
-        <height>600</height>
+        <width>1920</width>
+        <height>1080</height>
         <color>
             <r>0.447058856</r>
             <g>0.564705908</g>
@@ -46,29 +31,44 @@
     </slot>
     <slot>
         <type>2</type>
-        <width>800</width>
-        <height>600</height>
+        <width>1920</width>
+        <height>1080</height>
         <color>
             <r>0.447058856</r>
             <g>0.564705908</g>
             <b>0.603921592</b>
         </color>
-        <imagepath></imagepath>
+        <imagepath>images/2018-03-03-191018.jpg</imagepath>
         <videopath>videos/Timecoded_Big_bunny_2.mov</videopath>
         <paused>0</paused>
         <loop>1</loop>
         <speed>1.000000000</speed>
     </slot>
     <slot>
-        <type>1</type>
-        <width>800</width>
-        <height>600</height>
+        <type>2</type>
+        <width>1920</width>
+        <height>1080</height>
         <color>
             <r>0.447058856</r>
             <g>0.564705908</g>
             <b>0.603921592</b>
         </color>
         <imagepath></imagepath>
+        <videopath>videos/streifen_raspi2.mp4</videopath>
+        <paused>0</paused>
+        <loop>1</loop>
+        <speed>1.000000000</speed>
+    </slot>
+    <slot>
+        <type>0</type>
+        <width>1920</width>
+        <height>1080</height>
+        <color>
+            <r>0.447058856</r>
+            <g>0.564705908</g>
+            <b>0.603921592</b>
+        </color>
+        <imagepath>images/2017-12-30-184659.jpg</imagepath>
         <videopath></videopath>
         <paused>0</paused>
         <loop>1</loop>

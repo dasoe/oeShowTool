@@ -299,19 +299,21 @@ void oeScreenManager::saveWarpSettingsToXML(string path) {
 
     controlPoints = screens[actualScreen - 1]->getControlPoints();
 
-	auto tempSettings = warpXml.getChild("SETTINGS");
-	tempSettings.removeChild("CONTROLPOINTS");
-	auto tempPoints = tempSettings.appendChild("CONTROLPOINTS");
+    auto tempSettings = warpXml.getChild("SETTINGS");
+    tempSettings.removeChild("CONTROLPOINTS");
+    auto tempPoints = tempSettings.appendChild("CONTROLPOINTS");
 
+    
     ofLogNotice("XML-Datei für Warp geleert. Nun neu anlegen...");
 
     ofLogNotice("control points: " + ofToString(controlPoints.size()));
 
     for (unsigned int i = 0; i < controlPoints.size(); i++) {
-		tempPoints.setAttribute("PT", controlPoints[i]);
+        auto onePoint = tempPoints.appendChild("PT");
+        onePoint.set(controlPoints[i]);
     }
 
-	ofLogNotice("XML-Datei für Warp angelegt");
+    ofLogNotice("XML-Datei für Warp angelegt");
 
     warpXml.save(path);
     ofLogNotice("XML-Datei für Warp gespeichert: " + path);
