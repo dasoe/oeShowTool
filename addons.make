@@ -5,3 +5,4 @@ ofxImGui
 ofxBezierEditor
 ofxXmlSettings
 ofxOpenCv
+ofxFlashMessages
