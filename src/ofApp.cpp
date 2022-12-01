@@ -44,8 +44,6 @@ void ofApp::setup() {
     listMaskDirectory();
 
     //required call
-    
-    //style.FrameRounding
     gui.setup();
 
     settings.addInt("someInt", 1);
@@ -56,11 +54,9 @@ void ofApp::setup() {
     settings.addInt("maskWidth", 1024);
     settings.addInt("maskHeight", 768);
     settings.addBoolean("fullScreen", 0);
-    settings.addFloat("startMasterSpeed", 1);
-    settings.addBoolean("useFeedbackWindow", 1);
-    settings.addVec2f("feedbackWindowSize", ofVec2f(1000,500) );
 
-
+	
+	
     settings.addString("deafultMask", "masks/test1.jpg");
 
     // Step 2: 
@@ -70,13 +66,10 @@ void ofApp::setup() {
     // (everything that is sent through ofLog functions). Should be used in the main/first xml object/file
     settings.init("settings.xml", true);
 
-
-    ofSetFullscreen(settings.getBooleanValue("fullScreen"));
-
-    useFeedbackWindow = settings.getBooleanValue("useFeedbackWindow");
-
     
-    screenManager.setup(settings.getIntValue("firstMonitorWidth"), settings.getIntValue("firstMonitorHeight"), settings.getIntValue("contentWidth"), settings.getIntValue("contentHeight"));
+	ofSetFullscreen(settings.getBooleanValue("fullScreen"));
+
+	screenManager.setup(settings.getIntValue("firstMonitorWidth"), settings.getIntValue("firstMonitorHeight"), settings.getIntValue("contentWidth"), settings.getIntValue("contentHeight"));
     actualScreen = 0;
 
     bezier.init(settings.getIntValue("contentWidth"), settings.getIntValue("contentHeight"), settings.getIntValue("maskWidth"), settings.getIntValue("maskHeight"));
@@ -97,12 +90,6 @@ void ofApp::setup() {
     loadScreenSettings();
     loadScreenToSlotSettings();
     loadSceneSettings();
-
-    masterSpeed = settings.getFloatValue("startMasterSpeed");
-    masterSpeedMultiplier = 1.0f;
-    masterAlpha = 1.0f;
-    feedbackFBO.allocate( settings.getVec2fValue("feedbackWindowSize").x, settings.getVec2fValue("feedbackWindowSize").y - 100 );
-
 }
 
 //--------------------------------------------------------------
@@ -254,10 +241,10 @@ void ofApp::loadScreenSettings() {
 
 
         ofImage tempMask;
-        tempMask.load(screenData.getValue("screen:mask", "", i));
+        tempMask.load( screenData.getValue("screen:mask", "", i) );
         updateMasks(i, tempMask, screenData.getValue("screen:mask", "", i));
-
-
+                
+        
         screenManager.actualScreen = i + 1;
         screenManager.setScreenPresentationWidth(screenManager.actualScreen, screenData.getValue("screen:presentationWidth", 800, i));
         screenManager.setScreenPresentationHeight(screenManager.actualScreen, screenData.getValue("screen:presentationHeight", 600, i));
@@ -272,17 +259,17 @@ void ofApp::loadScreenSettings() {
 //--------------------------------------------------------------
 
 void ofApp::updateMasks(int number, ofImage tempMask, string maskString) {
-
-    masks[number] = tempMask;
-    masks[number].setImageType(OF_IMAGE_COLOR_ALPHA);
-    masks[number].getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
-    maskPaths[number] = maskString;
-
-    if (maskPaths[number].length()) {
-        contentFbos[number].getTexture().setAlphaMask(masks[number].getTexture());
-    } else {
-        contentFbos[number].getTexture().disableAlphaMask();
-    }
+    
+        masks[number] = tempMask;
+        masks[number].setImageType(OF_IMAGE_COLOR_ALPHA);
+        masks[number].getTexture().setSwizzle(GL_TEXTURE_SWIZZLE_A, GL_RED);
+        maskPaths[number] = maskString;
+    
+        if ( maskPaths[number].length() ) {
+            contentFbos[number].getTexture().setAlphaMask(masks[number].getTexture());            
+        } else {
+            contentFbos[number].getTexture().disableAlphaMask();    
+        }
 }
 
 
@@ -341,8 +328,7 @@ void ofApp::saveScreenToSlotSettings() {
 // -----------------------------------
 
 void ofApp::saveScreenToSlotSettings(int sceneNumber) {
-
-    addFeedback("trying to save screen-to-slot settings", OF_LOG_NOTICE, useFeedbackWindow);
+    ofLogNotice("trying to save screen-to-slot settings:");
     screenToSlotData.clear();
     screenToSlotData.addTag("SETTINGS");
     if (screenToSlotData.pushTag("SETTINGS")) {
@@ -357,7 +343,7 @@ void ofApp::saveScreenToSlotSettings(int sceneNumber) {
 
     string path = "";
     if (sceneNumber > 0) {
-        addFeedback("trying to save Screen to slot settings - for scene " + ofToString(sceneNumber), OF_LOG_NOTICE, useFeedbackWindow);
+        ofLogNotice("trying to save Screen to slot settings - for scene " + ofToString(sceneNumber));
         path = "scenes/" + ofToString(sceneNumber);
         ofDirectory dir(path);
         if (!dir.exists()) {
@@ -485,11 +471,11 @@ void ofApp::loadSlotSettings(int sceneNumber) {
         if (slots[i]->imagePath != slotData.getValue("slot:imagepath", "", i)) {
             slots[i]->loadTargetImage(slotData.getValue("slot:imagepath", "", i));
         }
-        ofLogNotice("getmoviepath of actual slot: " + slots[i]->getMoviePath());
+		ofLogNotice("getmoviepath of actual slot: " + slots[i]->getMoviePath());
 
-        ofLogNotice("movie Path in slot data: " + slotData.getValue("slot:videopath", "", i));
+		ofLogNotice("movie Path in slot data: " + slotData.getValue("slot:videopath", "", i));
 
-        // set target video in case video shall be changed
+		// set target video in case video shall be changed
         if (slots[i]->getMoviePath() != slotData.getValue("slot:videopath", "", i)) {
             slots[i]->loadTargetVideo(slotData.getValue("slot:videopath", "", i));
         }
@@ -524,9 +510,6 @@ vector <int> ofApp::getPrechosenSlots() {
 //--------------------------------------------------------------
 
 void ofApp::update() {
-    if (useFeedbackWindow) {
-    	flashMessages.update();
-    }
     // ofLogNotice("update!");
     actualTime = ofGetElapsedTimeMillis();
 
@@ -619,11 +602,11 @@ void ofApp::prepareContentFbos() {
         // ofLogNotice("contentFbos[i]: " + ofToString(contentFbos[i].getWidth()) + "masks[i]: " + ofToString(masks[i].getWidth()));
 
         // if a mask is provided, use it
-        //        if ( maskPaths[i].length() ) {
-        //            contentFbos[i].getTexture().setAlphaMask(masks[i].getTexture());            
-        //        } else {
-        //            contentFbos[i].getTexture().disableAlphaMask();    
-        //        }
+//        if ( maskPaths[i].length() ) {
+//            contentFbos[i].getTexture().setAlphaMask(masks[i].getTexture());            
+//        } else {
+//            contentFbos[i].getTexture().disableAlphaMask();    
+//        }
     }
 }
 
@@ -667,52 +650,6 @@ void ofApp::draw() {
     //required to call this at beginning
     gui.begin();
     {
-            auto& style = ImGui::GetStyle();
-        //ImGui::StyleColorsDark();
-        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f);
-        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(3.0f, 3.0f) );
-        
-        
-//        style.Colors[ImGuiCol_TitleBg] = (ImVec4) ImColor::HSV(6 / 7.0f, 0.3f, 0.6f) ;
-//        style.Colors[ImGuiCol_TitleBgCollapsed] = (ImVec4) ImColor::HSV(6 / 7.0f, 0.1f, 0.6f) ;
-//        style.Colors[ImGuiCol_TitleBgActive] = (ImVec4) ImColor::HSV(6 / 7.0f, 0.6f, 0.6f) ;
-                
-//        style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.26f, 0.26f, 0.26f, 1.00f);
-//        style.Colors[ImGuiCol_Text] = ImVec4(0.73f, 0.73f, 0.73f, 1.00f);
-//        style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
-//        style.Colors[ImGuiCol_WindowBg] = ImVec4(0.26f, 0.26f, 0.26f, 0.95f);
-//        style.Colors[ImGuiCol_PopupBg] = ImVec4(0.26f, 0.26f, 0.26f, 1.00f);
-//        style.Colors[ImGuiCol_Border] = ImVec4(0.26f, 0.26f, 0.26f, 1.00f);
-//        style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.26f, 0.26f, 0.26f, 1.00f);
-//        style.Colors[ImGuiCol_FrameBg] = ImVec4(0.16f, 0.16f, 0.16f, 1.00f);
-//        style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.16f, 0.16f, 0.16f, 1.00f);
-//        style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.16f, 0.16f, 0.16f, 1.00f);
-//        style.Colors[ImGuiCol_TitleBg] = ImVec4(0.36f, 0.36f, 0.36f, 1.00f);
-//        style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.36f, 0.36f, 0.36f, 1.00f);
-//        style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.36f, 0.36f, 0.36f, 1.00f);
-//        style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.26f, 0.26f, 0.26f, 1.00f);
-//        style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.21f, 0.21f, 0.21f, 1.00f);
-//        style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.36f, 0.36f, 0.36f, 1.00f);
-//        style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.36f, 0.36f, 0.36f, 1.00f);
-//        style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.36f, 0.36f, 0.36f, 1.00f);
-//        //style.Colors[ImGuiCol_ComboBg] = ImVec4(0.32f, 0.32f, 0.32f, 1.00f);
-//        style.Colors[ImGuiCol_CheckMark] = ImVec4(0.78f, 0.78f, 0.78f, 1.00f);
-//        style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.74f, 0.74f, 0.74f, 1.00f);
-//        style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.74f, 0.74f, 0.74f, 1.00f);
-//        style.Colors[ImGuiCol_Button] = ImVec4(0.36f, 0.36f, 0.36f, 1.00f);
-//        style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.43f, 0.43f, 0.43f, 1.00f);
-//        style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.11f, 0.11f, 0.11f, 1.00f);
-//        style.Colors[ImGuiCol_Header] = ImVec4(0.36f, 0.36f, 0.36f, 1.00f);
-//        style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.36f, 0.36f, 0.36f, 1.00f);
-//        style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.36f, 0.36f, 0.36f, 1.00f);
-//        style.Colors[ImGuiCol_ResizeGrip] = ImVec4(0.36f, 0.36f, 0.36f, 1.00f);
-//        style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
-//        style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
-//        style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(1.00f, 0.43f, 0.35f, 1.00f);
-//        style.Colors[ImGuiCol_PlotHistogram] = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
-//        style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
-//        style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.32f, 0.52f, 0.65f, 1.00f);
-//        style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.20f, 0.20f, 0.20f, 0.50f);
         // -------------- GUI Screens Part --------------------
         drawScreensGuiPart();
 
@@ -726,41 +663,15 @@ void ofApp::draw() {
             // -------------- GUI Scenes Part --------------------
             drawScenesGuiPart();
 
-            // -------------- GUI DMX Part --------------------
+            // -------------- GUI Scenes Part --------------------
             drawDMXLightsGuiPart();
-
-            // -------------- GUI Master Part --------------------
-            drawMasterGuiPart();
-            
-            // -------------- GUI Master Part --------------------
-            drawFeedbackGuiPart();
         }
-        ImGui::PopStyleVar(2);
+
     }
-    
 
     gui.end();
-}
 
-// -----------------------------------
-
-void ofApp::drawFeedbackGuiPart() {
-    feedbackFBO.begin();
-        ofClear(0);
-        flashMessages.draw();
-    feedbackFBO.end();
-    
-    ofPixels pix;
-    feedbackFBO.readToPixels(pix);
-    
-    textureSourceID = gui.loadPixels(pix);
-    static ImGuiWindowFlags flags = ImGuiWindowFlags_NoResize; // by ex    
-    ImGui::Begin("Feedback", NULL, flags);   
-    ImGui::SetWindowSize(settings.getVec2fValue("feedbackWindowSize"),0);
-    ImGui::Image(GetImTextureID(textureSourceID) ,ImVec2( feedbackFBO.getWidth(), feedbackFBO.getHeight() ) );
-    ImGui::End();
 }
-    
 
 // -----------------------------------
 
@@ -775,117 +686,6 @@ void ofApp::drawDMXLightsGuiPart() {
 }
 
 // -----------------------------------
-
-void ofApp::drawMasterGuiPart() {
-    ImGui::Begin("Master");
-
-    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(18.0f, 12.0f) );
-
-
-//    if (ImGui::SliderFloat("Speed", &masterSpeed, -10, 10)) {
-//        // master speed changed
-//        adjustMasterSpeed(masterSpeed);
-//    }
-    
-    
-    ImGui::Columns(2);
-    ImGui::Text("Speed & Multiplier");
-    
-    ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(6 / 7.0f, 0.6f, 0.6f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(6 / 7.0f, 0.7f, 0.7f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(6 / 7.0f, 0.8f, 0.8f));
-            
-    if (ImGui::Button("to 0")) {
-        masterSpeed = 0.00000001f;
-        adjustMasterSpeed(masterSpeed);        
-    }
-    ImGui::SameLine();
-
-    if (ImGui::Button("to 1")) {
-        masterSpeed = 1.0f;
-        adjustMasterSpeed(masterSpeed);        
-    }
-    ImGui::PopStyleColor(3);
-    
-    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor::HSV(6 / 7.0f, 0.5f, 0.5f));
-    ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, (ImVec4)ImColor::HSV(6 / 7.0f, 0.6f, 0.5f));
-    ImGui::PushStyleColor(ImGuiCol_FrameBgActive, (ImVec4)ImColor::HSV(6 / 7.0f, 0.7f, 0.5f));
-    ImGui::PushStyleColor(ImGuiCol_SliderGrab, (ImVec4)ImColor::HSV(6 / 7.0f, 0.9f, 0.9f));
-    
-    if (ImGui::VSliderFloat("S", ImVec2(25, 460), &masterSpeed, -1.0f, 1.0f, ""))  {
-            adjustMasterSpeed(masterSpeed);
-    }
-    if (ImGui::IsItemActive() || ImGui::IsItemHovered())
-    ImGui::SetTooltip("%.3f", masterSpeed);
-
-    ImGui::PopStyleColor(4);
-    ImGui::SameLine();
-    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor::HSV(6.9f / 7.0f, 0.5f, 0.5f));
-    ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, (ImVec4)ImColor::HSV(6.9f / 7.0f, 0.6f, 0.5f));
-    ImGui::PushStyleColor(ImGuiCol_FrameBgActive, (ImVec4)ImColor::HSV(6.9f  / 7.0f, 0.7f, 0.5f));
-    ImGui::PushStyleColor(ImGuiCol_SliderGrab, (ImVec4)ImColor::HSV(6.9f / 7.0f, 0.9f, 0.9f));
-    ImGui::VSliderFloat("M", ImVec2(25, 460), &masterSpeedMultiplier, 0, 10.0f, "");
-    if (ImGui::IsItemActive() || ImGui::IsItemHovered())
-        ImGui::SetTooltip("%.3f", masterSpeedMultiplier);
-    ImGui::PopStyleColor(4);
-
-    ImGui::NextColumn();
-    
-    
-    
-    
-    
-    ImGui::Text("Transparency");   
-    
-    ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(3.5 / 7.0f, 0.6f, 0.6f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(3.5 / 7.0f, 0.7f, 0.7f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(3.5 / 7.0f, 0.8f, 0.8f));
-            
-    if (ImGui::Button("Black")) {
-        masterAlpha = 0.00000001f;
-    }
-    ImGui::SameLine();
-
-    if (ImGui::Button("FULL")) {
-        masterAlpha = 1.0f;
-    }
-    ImGui::PopStyleColor(3);
-    
-    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor::HSV(3.5 / 7.0f, 0.5f, 0.5f));
-    ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, (ImVec4)ImColor::HSV(3.5 / 7.0f, 0.6f, 0.5f));
-    ImGui::PushStyleColor(ImGuiCol_FrameBgActive, (ImVec4)ImColor::HSV(3.5 / 7.0f, 0.7f, 0.5f));
-    ImGui::PushStyleColor(ImGuiCol_SliderGrab, (ImVec4)ImColor::HSV(3.5 / 7.0f, 0.9f, 0.9f));
-    
-    ImGui::VSliderFloat("Alpha", ImVec2(25, 460), &masterAlpha, 0, 1.0f, "");
-    
-    if (ImGui::IsItemActive() || ImGui::IsItemHovered())
-    ImGui::SetTooltip("%.3f", masterAlpha);
-
-    ImGui::PopStyleColor(4);
-    
-    
-    
-    
-
-    ImGui::Columns(1);
-    ImGui::PopStyleVar(1);
-    ImGui::End();
-
-}
-
-
-// -----------------------------------
-void ofApp::addFeedback(string _message, ofLogLevel _level) {
-    ofLog(_level, _message);
-}
-// -----------------------------------
-void ofApp::addFeedback(string _message, ofLogLevel _level, bool _showFlashMessage) {
-    ofLog(_level, _message);
-    if (_showFlashMessage) {
-            flashMessages.add(_message, 6, _level);
-    }
-}
-
 
 void ofApp::addDMXLight() {
 
@@ -1041,28 +841,17 @@ void ofApp::drawScenesGuiPart() {
 
 // -----------------------------------
 
-void ofApp::adjustMasterSpeed(float mspeed) {
-    ofLogVerbose("adjust Master Speed to " + ofToString(mspeed));
-    masterSpeedMultiplier = 1;
-    for (unsigned int i = 0; i < slots.size(); i++) {
-        slots[i]->setVideoSpeed( videoSpeed[i] * (float) mspeed );
-    }
-}
-
-
-// -----------------------------------
-
 void ofApp::startScene(int sceneNumber) {
     ofLogNotice("start Scene Number " + ofToString(sceneNumber) + ": try to laod slot settings...");
     loadSlotSettings(sceneNumber);
-    ofLogNotice("try to load screen to slot settings...");
+	ofLogNotice("try to load screen to slot settings...");
     loadScreenToSlotSettings(sceneNumber);
-    ofLogNotice("Vector tempScreenToSlot for sceneNumber " + ofToString(sceneNumber));
+	ofLogNotice("Vector tempScreenToSlot for sceneNumber " + ofToString(sceneNumber));
     vector <int> tempScreenToSlot = scenes[sceneNumber - 1]->getSlots();
     for (unsigned int i = 0; i < tempScreenToSlot.size(); i++) {
         targetSlotNumberForScreen[i] = tempScreenToSlot[i];
         //fadeTimeForScreen[i] = 500;
-        ofLogNotice("startTransitionForScreen " + ofToString(i + 1));
+		ofLogNotice("startTransitionForScreen " + ofToString(i+1));
         startTransitionForScreen(i + 1);
     }
 
@@ -1269,8 +1058,8 @@ void ofApp::drawScreensGuiPart() {
                     // set an empty mask
                     ofImage tempMask;
                     updateMasks(screenManager.actualScreen - 1, tempMask, "");
-
-                }
+                    
+                } 
                 ImGui::SameLine();
 
 
@@ -1278,10 +1067,10 @@ void ofApp::drawScreensGuiPart() {
                     //go through and print out all the paths
                     for (unsigned int i = 0; i < maskDir.size(); i++) {
                         //const char * c = maskDir.getPath(i).c_str();
-                        if (ImGui::MenuItem(maskDir.getPath(i).c_str())) {
+                        if ( ImGui::MenuItem( maskDir.getPath(i).c_str() ) ) {
                             ofImage tempMask;
-                            tempMask.load(maskDir.getPath(i));
-                            updateMasks(screenManager.actualScreen - 1, tempMask, maskDir.getPath(i));
+                            tempMask.load(maskDir.getPath(i) );
+                             updateMasks(screenManager.actualScreen - 1, tempMask, maskDir.getPath(i));
                         }
                     }
                     ImGui::EndMenu();
@@ -1417,62 +1206,62 @@ void ofApp::drawSlotGuiPart() {
                     }
                 }
                 ImGui::SameLine();
-                if (ImGui::Button("speed to 1")) {
-                    videoSpeed[i] = 1.0;
-                    slots[i]->setVideoSpeed(videoSpeed[i]*masterSpeed);
-                }
-                ImGui::SameLine();
+				if (ImGui::Button("speed to 1")) {
+					videoSpeed[i] = 1.0;
+					slots[i]->setVideoSpeed(videoSpeed[i]);
+				}
+				ImGui::SameLine();
                 // TODO: check if there is a flash, find better approach in restartVideo() if yes
                 if (ImGui::Button("rewind")) {
                     slots[i]->restartVideo();
                 }
                 ImGui::PushItemWidth(350);
 
-                float tempPos = slots[i]->getVideoPosition()*100;
+				float tempPos = slots[i]->getVideoPosition()*100;
                 if (ImGui::SliderFloat("scrub", &tempPos, 0, 100)) {
                     slots[i]->setVideoPosition(tempPos);
                 }
-                if (ImGui::SliderFloat("speed", &videoSpeed[i], 0, 30)) {
-                    slots[i]->setVideoSpeed(videoSpeed[i]*masterSpeed);
-                }
-                ImGui::PopItemWidth();
+				if (ImGui::SliderFloat("speed", &videoSpeed[i], 0, 30)) {
+					slots[i]->setVideoSpeed(videoSpeed[i]);
+				}
+				ImGui::PopItemWidth();
 
                 // ImGui::Image()
             }
 
-            ImGui::PushItemWidth(350);
-            int tempFadeTime = slots[i]->fadeTimeForSlot;
-            if (ImGui::SliderInt("fade time", &tempFadeTime, 0, 3600)) {
-                slots[i]->fadeTimeForSlot = tempFadeTime;
-            }
-            ImGui::PopItemWidth();
+			ImGui::PushItemWidth(350);
+			int tempFadeTime = slots[i]->fadeTimeForSlot;				
+			if (ImGui::SliderInt("fade time", &tempFadeTime, 0, 3600)) {
+				slots[i]->fadeTimeForSlot = tempFadeTime;
+			}
+			ImGui::PopItemWidth();
 
-            ImGui::PushItemWidth(90);
-            float tempBrightness = slots[i] ->brightness;
-            float tempContrast = slots[i]->contrast;
-            float tempSaturation = slots[i]->saturation;
-            if (ImGui::SliderFloat("br", &tempBrightness, 0, 3.0)) {
-                slots[i]->brightness = tempBrightness;
-            }
-            ImGui::SameLine();
-            if (ImGui::SliderFloat("co", &tempContrast, 0, 3.0)) {
-                slots[i]->contrast = tempContrast;
-            }
-            ImGui::SameLine();
-            if (ImGui::SliderFloat("sa", &tempSaturation, 0, 3.0)) {
-                slots[i]->saturation = tempSaturation;
-            }
-            ImGui::SameLine();
-            if (ImGui::Button("->0")) {
-                slots[i]->brightness = 1.0;
-                slots[i]->contrast = 1.0;
-                slots[i]->saturation = 1.0;
-            }
+			ImGui::PushItemWidth(90);
+			float tempBrightness = slots[i] ->brightness;
+			float tempContrast = slots[i]->contrast;
+			float tempSaturation = slots[i]->saturation;
+			if (ImGui::SliderFloat("br", &tempBrightness, 0, 3.0)) {
+				slots[i]->brightness = tempBrightness;
+			}
+			ImGui::SameLine();
+			if (ImGui::SliderFloat("co", &tempContrast, 0, 3.0)) {
+				slots[i]->contrast = tempContrast;
+			}
+			ImGui::SameLine();
+			if (ImGui::SliderFloat("sa", &tempSaturation, 0, 3.0)) {
+				slots[i]->saturation = tempSaturation;
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("->0")) {
+				slots[i]->brightness = 1.0;
+				slots[i]->contrast = 1.0;
+				slots[i]->saturation = 1.0;
+			}
+				
+				
+			ImGui::PopItemWidth();
 
-
-            ImGui::PopItemWidth();
-
-            string tempstring = "(loaded: " + ofToString(slots[i]->getInfo()) + ")";
+			string tempstring = "(loaded: " + ofToString(slots[i]->getInfo()) + ")";
             ImGui::Text(tempstring.c_str());
 
             ImGui::PopID();
@@ -1535,10 +1324,10 @@ void ofApp::drawSlotGuiPart() {
                     ImGui::EndMenu();
 
                 }
-                bool tempRewindOnTransition = slots[i]->rewindOnTransition;
-                if (ImGui::Checkbox("rewind on Transiition", &tempRewindOnTransition)) {
-                    slots[i]->rewindOnTransition = tempRewindOnTransition;
-                }
+				bool tempRewindOnTransition = slots[i]->rewindOnTransition;
+				if (ImGui::Checkbox("rewind on Transiition", &tempRewindOnTransition)) {
+					slots[i]->rewindOnTransition = tempRewindOnTransition;
+				}
 
             }
 

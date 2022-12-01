@@ -21,6 +21,6 @@
         <pointsX>6</pointsX>
         <pointsY>5</pointsY>
         <pixelsPerGridDivision>10</pixelsPerGridDivision>
-        <mask></mask>
+        <mask>masks/mulli.jpg</mask>
     </screen>
 </SETTINGS>

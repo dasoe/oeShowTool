@@ -15,9 +15,3 @@
 <contentWidth>1920</contentWidth>
 <contentHeight>1080</contentHeight>
 <deafultMask>masks/mulli.jpg</deafultMask>
-<startMasterSpeed>1</startMasterSpeed>
-<useFeedbackWindow>1</useFeedbackWindow>
-<feedbackWindowSize>
-	<x>500</x>
-	<y>800</y>
-</feedbackWindowSize>

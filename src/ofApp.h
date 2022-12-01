@@ -6,8 +6,6 @@
 #include "ofxXmlBasedProjectSettings.h"
 #include "ofxXmlSettings.h"
 #include "ofxImGui.h"
-#include "ofxFlashMessages.h"
-
 
 class ofApp : public ofBaseApp {
 public:
@@ -20,10 +18,6 @@ public:
     void drawSlotGuiPart();
     void drawScenesGuiPart();
     void drawDMXLightsGuiPart();
-    void drawMasterGuiPart();
-    void drawFeedbackGuiPart();
-    
-    
     void updateMasks(int number, ofImage tempMask, string maskString);
     
     void saveSceneSettings(int sceneNumber);
@@ -41,7 +35,6 @@ public:
     void loadScreenToSlotSettings();
     void loadScreenToSlotSettings(int sceneNumber);
 
-    void adjustMasterSpeed(float mspeed);
     void startScene(int sceneNumber);
     void startTransitionForScreen(int screenNumber);  
     void addScreen(ofPoint position, int width, int height, int pointsX, int pointsY, int pixelsPerGridDivision);
@@ -65,8 +58,6 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-    void addFeedback(string _message, ofLogLevel _level);
-    void addFeedback(string _message, ofLogLevel _level, bool _showFlashMessage);
 
     ofImage mask;
 
@@ -121,7 +112,6 @@ public:
     vector <float> targetVideoSpeed;
 
 
-    float masterSpeed, masterSpeedMultiplier, masterAlpha;
 
     oeBezierEditor bezier;
 
@@ -137,9 +127,4 @@ public:
 
     string help;
 
-    ofxFlashMessages flashMessages;
-    bool useFeedbackWindow;
-    ofFbo feedbackFBO;
-    ofTexture textureSource;
-    GLuint textureSourceID;
 };
