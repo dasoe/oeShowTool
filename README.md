@@ -1,5 +1,8 @@
 # oeShowTool
 
+### This is an old project. Please use [oeShowTool_III](https://gitlab.com/dasoe/oeshowtool_iii) instead
+
+
 This is an openFrameworks Tool. 
 Please visit http://openframeworks.cc to download it. In case you don't know it: it is very worth checking it out!
  
